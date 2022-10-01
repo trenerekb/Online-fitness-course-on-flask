@@ -1,0 +1,264 @@
+
+{% extends 'base.html'%}
+
+
+{% block body %}
+<section class="watch-video">
+    <h1 class="number_days">{{header}}</h1>
+<div class="video-container">
+    
+    <div class="video">
+        <video src="{{ url_for('static', filename=video) }}" controls poster="images/post-1-1.png" id="video"></video>
+    </div>
+    <h3 class="title">{{video_title}}</h3>
+    <div class="info">
+
+    </div>
+    <div class="tutor">
+        <div>
+            <h3>Задание</h3>
+        </div>
+    </div>
+
+    <p class="description">
+        {{task_description}}
+    </p>
+</div>
+
+</section>
+
+<section class="comments">
+
+<h1 class="heading">Ваш отчет</h1>
+
+<form action="{{url_for('add_report')}}" class="add-comment" method="POST" enctype="multipart/form-data">
+    <h3>Добавить отчет</h3>
+    <textarea name="text_report" placeholder="введите свой отчет" required maxlength="1000" cols="30" rows="10"></textarea>
+
+    <div class="images-report"></div>
+
+    <div class="inline-option-btn">
+        <label class="custom-file-upload">
+            <i class="fa fa-2x fa-camera"></i>
+            Добавить фото
+            <input type="file" id="file" name="file" multiple="multiple" accept="image/png, image/jpeg, image/jpg"/>
+        </label>
+    </div>
+
+    <input type="submit" value="Отправить" class="inline-btn" > 
+</form>
+
+<h1 class="heading">Отчеты участниц</h1>
+
+<div class="box-container">
+    <div class="box">
+        <div class="user">
+            <img src="{{url_for('static', filename='images/img-report.jpeg')}}" alt="">
+            <div>
+            <h3>{{ current_user }}</h3>
+            <span>{{ date_report_current_user }}</span>
+            </div>
+        </div>
+        <div class="comment-box">{{ text_report_current_user }}</div>
+
+        <div class="images-report"> 
+            <!-- <img src="{{url_for('static', filename='images/img_report1.jpeg')}}" alt="IMG" class="img-report">
+            <img src="{{url_for('static', filename='images/img_report2.jpeg')}}" alt="IMG" class="img-report">
+            <img src="{{url_for('static', filename='images/img_report3.jpeg')}}" alt="IMG" class="img-report">
+            <img src="{{url_for('static', filename='images/img_report4.jpeg')}}" alt="IMG" class="img-report">
+            <img src="{{url_for('static', filename='images/img_report5.jpeg')}}" alt="IMG" class="img-report"> -->
+        </div>  
+
+        <form action="" class="flex-btn">
+            <input type="submit" value="Редактировать" name="edit_comment" class="inline-option-btn">
+            <input type="submit" value="Удалить" name="delete_comment" class="inline-delete-btn">
+        </form>
+    </div>
+
+    <div class="box">
+        <div class="user">
+            <img src="images/pic-2.jpg" alt="">
+            <div>
+            <h3>{{user_name_comment}}</h3>
+            <span>22-10-2022</span>
+            </div>
+        </div>
+        <div class="comment-box">awesome tutorial!
+            keep going!</div>
+        <div class="btn-like-comment">
+            
+            <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
+            <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
+
+        </div>
+        
+
+        <div class="box-reply-comment">  
+            <div class="user-reply">
+                <img src="images/pic-2.jpg" alt="">
+                <div>
+                <h3>John deo</h3>
+                <span>22-10-2022</span>
+                </div>
+            </div>
+
+            <form action="" class="reply-comment" method="post">
+            <textarea class="add-comment-report" name="comment_box" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
+                <div class="reply-btn">
+                    <label class="custom-file-upload">
+                        <i class="fa fa-2x fa-camera"></i>
+                        <input type="file" name="input_foto" accept=""/>
+                    </label>
+                    <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-coment">
+                    
+                </div>
+            </form>     
+
+            <div class="user-reply">
+                <img src="images/pic-2.jpg" alt="">
+                <div>
+                <h3>{{user_name_reply}}</h3>
+                <span>{{date_reply_comment}}</span>
+                </div>
+            </div>
+            <div class="comment-box">{{reply_comment}}</div>
+            <div class="btn-like-comment">
+                
+                <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
+                <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
+    
+            </div>
+
+            <div class="user-reply">
+                <img src="images/pic-2.jpg" alt="">
+                <div>
+                <h3>{{user_name_reply}}</h3>
+                <span>{{date_reply_comment}}</span>
+                </div>
+            </div>
+            <div class="comment-box">{{reply_comment}}</div>
+            <div class="btn-like-comment">
+                
+                <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
+                <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
+    
+            </div>
+
+ 
+        </div> 
+        
+        
+        
+            
+    </div>
+
+
+
+
+    <div class="box">
+        <div class="user">
+            <img src="images/pic-2.jpg" alt="">
+            <div>
+            <h3>{{user_name_comment}}</h3>
+            <span>{{date_comment}}</span>
+            </div>
+        </div>
+        <div class="comment-box">{{comment}}</div>
+        <div class="btn-like-comment">
+            
+            <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
+            <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
+
+        </div>
+        
+
+        <div class="box-reply-comment">  
+            <div class="user">
+                <img src="images/pic-2.jpg" alt="">
+                <div>
+                <h3>{{user_name_reply}}</h3>
+                <span>{{date_reply_comment}}</span>
+                </div>
+            </div>
+
+                <form action="" class="reply-comment" method="post">
+                <textarea class="add-comment-report" name="comment_box" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
+                <div class="reply-btn">
+                    <label class="custom-file-upload">
+                        <i class="fa fa-2x fa-camera"></i>
+                        <input type="file" name="input_foto" accept=""/>
+                    </label>
+                    <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-coment">
+                    
+                </div>
+                </form>
+
+            <div class="user">
+                <img src="images/pic-2.jpg" alt="">
+                <div>
+                <h3>{{user_name_reply}}</h3>
+                <span>{{date_reply_comment}}</span>
+                </div>
+            </div>
+            <div class="comment-box">{{reply_comment}}</div>
+            <div class="btn-like-comment">
+                
+                <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
+                <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
+    
+            </div>
+                
+
+        </div> 
+    </div>
+
+
+
+
+    <div class="box">
+        <div class="user">
+            <img src="images/pic-2.jpg" alt="">
+            <div>
+            <h3>john deo</h3>
+            <span>22-10-2022</span>
+            </div>
+        </div>
+        <div class="comment-box">awesome tutorial!
+            keep going!</div>
+        <div class="btn-like-comment">
+            
+            <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
+            <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
+
+        </div>
+        
+
+        <div class="box-reply-comment">  
+            <div class="user">
+                <img src="images/pic-2.jpg" alt="">
+                <div>
+                <h3>John deo</h3>
+                <span>22-10-2022</span>
+                </div>
+            </div>
+
+                <form action="" class="reply-comment" method="post">
+                <textarea class="add-comment-report" name="comment_box" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
+                <div class="reply-btn">
+                    <label class="custom-file-upload">
+                        <i class="fa fa-2x fa-camera"></i>
+                        <input type="file" name="input_foto" accept=""/>
+                    </label>
+                    <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-coment">
+                    
+                </div>
+                </form>     
+        </div> 
+    </div>
+
+
+</div>
+
+</section>
+{% endblock %}
+
