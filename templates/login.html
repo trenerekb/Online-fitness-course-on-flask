@@ -1,23 +1,25 @@
 {% extends 'base.html'%}
 
-
 {% block body %}
 
 <section class="form-container">
-   
 
-   <form action="/login" method="post" enctype="multipart/form-data">
-      
+   <form action="" method="POST" enctype="multipart/form-data">
       <h3>Авторизация</h3>
       {% block content %}
          {% for cat, msg in get_flashed_messages(True) %}
-         <div class="flash {{cat}}">{{msg}}</div>
+         <div class="flash_{{cat}}">{{msg}}</div>
          {% endfor %}
+      <p>Ваше имя <span>*</span></p>
+      <input type="text" name="name" placeholder="введите ваше имя" required maxlength="50" class="box">
       <p>Ваш email <span>*</span></p>
-      <input type="email" name="username" placeholder="введите ваш email" required maxlength="50" class="box">
+      <input type="email" name="email" placeholder="введите ваш email" required maxlength="50" class="box">
       <p>Ваш пароль <span>*</span></p>
       <input type="password" name="psw" placeholder="введите ваш пароль" required maxlength="20" class="box">
       <input type="submit" value="Войти" name="submit" class="btn">
+      <div>
+         <a href="{{ url_for('register') }}">Регистрация</a>
+      </div>
    </form>
    {% endblock %}
 </section>

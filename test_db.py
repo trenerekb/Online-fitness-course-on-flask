@@ -1,15 +1,25 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from config import Configuration
+# from flask_mysqldb import MySQL
+# from flask_mysql_connector import MySQL
 from flask import Flask
+import pymysql
 
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:''@localhost/users_data'
+app.config['SECRET_KEY'] = 'fdavbmeworvepz'
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'users_db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ruslan:bararus451@127.0.0.1/users_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:123@localhost/postgres'
 # app.config.from_object(Configuration)
 
 db = SQLAlchemy(app)
+# db = sqlalchemy.create_engine('mysql+pymysql://root:1@127.0.0.1/users_data')
 
 
 class Users(db.Model):
@@ -33,22 +43,50 @@ class Profiles(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users_id'))
 
-    # def __int__(self, *args, **kwargs):
-    #     super(Profiles, self).__init__(*args, **kwargs)
+    def __int__(self, *args, **kwargs):
+        super(Profiles, self).__init__(*args, **kwargs)
 
     def __repr__(self):
         return f'<Profiles {self.id}>'
+
+db.create_all()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+# import pymysql.cursors
+#
 # try:
-#     connection = pymysql.connect(
-#         host='localhost',
-#         port=8889,
-#         user='root',
-#         password='',
-#         database='users_data',
-#         cursorclass=pymysql.cursors.DictCursor,
-#         autocommit=True
-#     )
-#     print('Good....')
+#     connection = pymysql.connect(host='localhost',
+#                                  user='ruslan',
+#                                  password='bararus451',
+#                                  database='sakila',
+#                                  charset='utf8mb4',
+#                                  cursorclass=pymysql.cursors.DictCursor)
+#     try:
+#         with connection:
+#             with connection.cursor() as cursor:
+#                 # Create a new record
+#                 sql = "SELECT * FROM actor;"
+#                 cursor.execute(sql)
+#                 rows = cursor.fetchall()
+#                 for row in rows:
+#                     print(row)
+#                 print('#' * 20)
+#
+#     finally:
+#         connection.close()
+#
 # except Exception as ex:
-#     print('Bad...')
 #     print(ex)
