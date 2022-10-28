@@ -79,7 +79,6 @@ section{
    margin-bottom: 2.5rem;
    border-bottom: var(--border);
    padding-bottom: 1.5rem;
-   
 }
 
 .inline-btn,
@@ -193,7 +192,16 @@ section{
    border-radius: 0.5rem;
 }
 
-
+.flash_alert{
+   background: #8ab5e1;
+   color: var(--white);
+   font-size: 1.5rem;
+   text-align: center;
+   margin-top: 1rem;
+   margin-bottom: 1rem;
+   padding-block: 0.5rem;
+   border-radius: 0.5rem;
+}
 
 
 .header .flex .search-form{
@@ -384,7 +392,14 @@ section{
 
 }
 
-
+.form-container .checkbox {
+    font-size: 1.7rem;
+    color: var(--light-color);
+    padding-top: 1rem;
+    display: inline-block;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
 
 
 .home-grid .box-container{
@@ -1706,7 +1721,6 @@ i.fa.fa-2x.fa-camera {
 .footer span{
    color:var(--main-color);
 }
-
 
 
 @media (max-width:1200px){
