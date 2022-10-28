@@ -17,27 +17,33 @@ def allowed_file(filename):
 @app.route('/')
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
 
     name = request.form.get('name')
+    surname = request.form.get('surname')
     email = request.form.get('email')
     password1 = request.form.get('psw1')
     password2 = request.form.get('psw2')
 
     if request.method == 'POST':
-        client = Client.query.filter_by(email=email).first()
-        if client:
-            flash('Пользователь с таким email уже существует', category='error')
-        elif not(name or password1 or password2):
-            flash('Пожалуйста, заполните все поля', category='error')
-        elif password1 != password2:
-            flash('Неверный повторный пароль', category='error')
-        else:
-            hash_psw = generate_password_hash(password1)
-            new_client = Client(name=name, email=email, psw=hash_psw)
-            db.session.add(new_client)
-            db.session.commit()
-            login_user(new_client, remember=True)
-            return redirect(url_for('login'))
+        try:
+            client = Client.query.filter_by(email=email).first()
+            if client:
+                flash('Пользователь с таким email уже существует', category='error')
+            elif not(name or surname or password1 or password2):
+                flash('Пожалуйста, заполните все поля', category='error')
+            elif password1 != password2:
+                flash('Неверный повторный пароль', category='error')
+            else:
+                hash_psw = generate_password_hash(password1)
+                new_client = Client(name=name, surname=surname, email=email, psw=hash_psw)
+                db.session.add(new_client)
+                db.session.commit()
+                login_user(new_client, remember=True)
+                return redirect(url_for('login'))
+        except:
+            db.session.rollback()
 
     return render_template('register.html', title='Регистрация')
 
@@ -45,19 +51,22 @@ def register():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+
     name = request.form.get('name')
     email = request.form.get('email')
     password = request.form.get('psw')
 
     if name and password and email:
         client = Client.query.filter_by(email=email).first()
-        # print(client)
+        print(client.psw)
         if client and check_password_hash(client.psw, password):
-
-            if check_password_hash(client.psw, password) is not True:
+            print(check_password_hash(client.psw, password))
+            if check_password_hash(client.psw, password) is False:
                 flash('Пароль заполнен не верно', category='error')
-
-            login_user(client, remember=True)
+            remember = True if request.form.get('remember_me') else False
+            login_user(client, remember=remember)
             next_page = request.args.get('next')
             if next_page is not None:
                 return redirect(url_for(next_page))
@@ -66,7 +75,7 @@ def login():
         else:
             flash(f'Пользователя с email "{email}" нет в базе', category='error')
     else:
-        flash('Пожалуйста, заполните все поля', category='error')
+        flash('Пожалуйста, заполните все поля', category='alert')
 
     return render_template('login.html', title='Авторизация')
 
@@ -81,7 +90,6 @@ def logout():
 @app.after_request
 def redirect_to_signin(response):
     if response.status_code == 401:
-        print(request.url)
         return redirect(url_for('login'))
 
     return response
@@ -92,7 +100,7 @@ def redirect_to_signin(response):
 def profile():
     # if 'userLogged' not in session or session['userLogged'] != username:
     #     abort(401)
-    return render_template('profile.html', title='Профиль', username=current_user.name)
+    return render_template('profile.html', title='Профиль', username=current_user)
 
 
 @app.route('/day/<day_number>')
@@ -113,10 +121,10 @@ def day_marathon(day_number):
     task_description = 'описание задания'
 
     if day_number == '0':
+        print(current_user.role)
         return render_template('day0.html', count_days=count_days_list, title=f'День {day_number}', video=video,
-                               video_title = video_title, header=f'День {day_number}',
-                               task_description=task_description, current_user=current_user.name,
-                               user_name_comment=user_name_comment, date_comment=date_comment, comment=comment,
+                               video_title=video_title, header=f'День {day_number}',
+                               task_description=task_description, user_name_comment=user_name_comment, date_comment=date_comment, comment=comment,
                                user_name_reply=user_name_reply, date_reply_comment=date_reply_comment,
                                reply_comment=reply_comment, text_report_current_user=text_report_current_user,
                                date_report_current_user=date_report_current_user)
@@ -181,6 +189,18 @@ def quiz():
         print(growth,weight, date_birth, hand, thorax, waist, abdomen, buttocks, thigh)
         flash('Отлично!', category='right')
     return redirect(url_for('day_marathon', day_number='0'))
+
+
+# @app.route('/admin', methods=['POST', 'GET'])
+# @login_required
+# def admin():
+#     print('PRIVET')
+#     if current_user.is_authenticated and current_user.role == 'admin':
+#         print(request.url)
+#         return render_template('admin/master.html')
+#         # return render_template('admin/master.html')
+#     else:
+#         return redirect(url_for('login'))
 
 
 @app.errorhandler(404)
