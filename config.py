@@ -1,3 +1,4 @@
+import datetime
 
 
 class Configuration(object):
@@ -9,4 +10,5 @@ class Configuration(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # basedir = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_DATABASE_URI = 'sqlite:///women_marathon.db'
+    # permanent_session_lifetime = datetime.timedelta(days=35)
     #'mysql:///' + os.path.join(basedir, 'database.db')

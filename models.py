@@ -8,14 +8,20 @@ from app import db, manager
 class Client(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    surname = db.Column(db.String(50), nullable=False)
+    role = db.Column(db.String(50), nullable=False, default='student')
     phone = db.Column(db.Integer)
     email = db.Column(db.String(50), unique=True)
-    psw = db.Column(db.String(500), nullable=True)
+    psw = db.Column(db.String(500), nullable=False)
     date_birth = db.Column(db.DateTime)
     date = db.Column(db.DateTime, default=datetime.now())
 
+    reports = db.relationship('Report', backref='client', lazy=True)
+    profiles = db.relationship('Profile', backref='client', lazy=True)
+    results = db.relationship('Result', backref='client', lazy=True)
+
     def __repr__(self):
-        return f'<Client {self.id}>'
+        return f'<Client {self.id}, {self.name} {self.surname}>'
 
 
 class Profile(db.Model):
@@ -42,12 +48,15 @@ class Result(db.Model):
 class Day(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number_day = db.Column(db.Integer)
-    video = db.Column(db.LargeBinary)
-    name = db.Column(db.String(500), default=datetime.now())
+    video_path = db.Column(db.String)
+    cover_video_path = db.Column(db.String)
+    title_video = db.Column(db.String(500))
     task_description = db.Column(db.Text)
 
+    reports = db.relationship('Report', backref='day', lazy=True)
+
     def __repr__(self):
-        return f'<Day {self.id}>'
+        return f'Day {self.number_day}'
 
 
 class Report(db.Model):
@@ -57,6 +66,8 @@ class Report(db.Model):
     text = db.Column(db.Text)
     like = db.Column(db.Integer)
 
+    image = db.relationship('Image', backref='report', lazy=True)
+
     def __repr__(self):
         return f'<Report {self.id}>'
 
@@ -64,7 +75,7 @@ class Report(db.Model):
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'), nullable=False)
-    image = db.Column(db.LargeBinary)
+    image_path = db.Column(db.String)
 
     def __repr__(self):
         return f'<ImageReport {self.id}>'
