@@ -59,7 +59,7 @@ document.querySelector('#btn-comment').onclick = () =>{
 // UPLOAD FUNCTION
 function upload(selector, options={}) {
    let files = []
-   const images_report = document.querySelector('.images-report');
+   const images_report = document.querySelector('.images-report')
    const input = document.querySelector(selector)
 
    const open = document.createElement('button')
@@ -77,18 +77,15 @@ function upload(selector, options={}) {
       
       files = Array.from(event.target.files)
       
-
       files.forEach(file => {
          if (!file.type.match('image')) {
             return
          }
 
-         
          const reader = new FileReader()
 
          reader.onload = ev => {
-            const img = document.createElement('img');
-            
+            const img = document.createElement('img')
 
             images_report.insertAdjacentHTML('afterbegin', `<div class="img-report">
             <div class="preview-remove" data-name="${file.name}">&times;</div>
@@ -116,7 +113,6 @@ function upload(selector, options={}) {
    open.addEventListener('click', triggerInput)
    input.addEventListener('change', changeHandler)
    images_report.addEventListener('click', removeHandler )
-
 }
 
 upload('#file', {multi: true})  

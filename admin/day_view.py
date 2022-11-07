@@ -1,19 +1,12 @@
-import os.path
+import os
+from config import Configuration
 
 from flask import url_for, Markup
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
 
-# 'D:\Python\fitness_marathon'
-file_path = os.path.abspath(os.path.dirname(__name__))
-
 
 def name_gen_image(model, file_data):
-    hash_name = f'day{model.number_day}/{file_data.filename}'
-    return hash_name
-
-
-def name_gen_video(model, file_data):
     hash_name = f'day{model.number_day}/{file_data.filename}'
     return hash_name
 
@@ -23,6 +16,7 @@ class DayView(ModelView):
     column_labels = {
     'number_day': '№ Дня',
     'video_path': 'Видео',
+    'resume_video': 'Резюме из видео',
     'cover_video_path':'Обложка',
     'title_video': 'Название видео',
     'task_description': "Описание задания"
@@ -54,12 +48,12 @@ class DayView(ModelView):
     form_extra_fields = {
         'cover_video_path': form.ImageUploadField('Загрузи обложку для видео',
                                                   # Передаем абсолютный путь к каталогу, где хранятся файлы
-                                                  base_path=os.path.join(file_path,
+                                                  base_path=os.path.join(Configuration.base_dir,
                                                   'static/storage/marathon_days/'),
                                                   url_relative_path='storage/marathon_days/',
                                                   namegen=name_gen_image,
                                                   allowed_extensions=['jpg', 'jpeg', 'png']),
-        'video_path': form.FileUploadField('Загрузи видео', base_path=os.path.join(file_path,
+        'video_path': form.FileUploadField('Загрузи видео', base_path=os.path.join(Configuration.base_dir,
                                            f'static/storage/marathon_days/'),
                                            namegen=name_gen_image,
                                            allowed_extensions=['mp4'])

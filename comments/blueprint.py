@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template
-from models import Client
 
 
 comments = Blueprint('comments', __name__, template_folder='templates')

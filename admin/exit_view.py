@@ -5,4 +5,4 @@ from flask_admin import BaseView, expose
 class ExitView(BaseView):
     @expose('/')
     def index2(self):
-        return redirect(url_for("login"))
+        return redirect(url_for("registration.login"))

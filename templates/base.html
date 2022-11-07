@@ -21,23 +21,45 @@
         <img src="{{ url_for('static', filename='images/logo.png') }}" class="image_logo" alt="Body Home">
     </a>
 
-    <div class="icons">
-        <div id="menu-btn" class="fas fa-bars"></div>
-        <div id="search-btn" class="fas fa-search"></div>
-        <div id="user-btn" class="fas fa-user"></div>
-        <div id="toggle-btn" class="fas fa-sun"></div>
+    {% if current_user.is_authenticated %}
+        <div class="icons">
+            {% if current_user.role=='admin' %}
+                    <a href="/admin/"><div class="fa-solid fa-user-shield"></div></a>
+            {% endif %}
+
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+        </div>
+    <div class="profile">
+        <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" class="image" alt="">
+        <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
+        <p class="role">{{current_user.role}}</p>
+        <a href="{{ url_for('profile', day_number=0) }}" class="btn">Мой профиль</a>
+        <div class="flex-btn">
+        <a href="{{ url_for('registration.logout')}}" class="option-btn">Выход</a>
+        </div>
     </div>
+
+    {% else %}
+        <div class="icons">
+            <div id="search-btn" class="fas fa-search"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+            <div id="toggle-btn" class="fas fa-sun"></div>
+        </div>
 
     <div class="profile">
         <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" class="image" alt="">
-        <h3 class="name">Name</h3>
-        <p class="role">studen</p>
-        <a href="profile.html" class="btn">Мой профиль</a>
+        <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
+        <p class="role">{{current_user.role}}</p>
         <div class="flex-btn">
-        <a href="login.html" class="option-btn">login</a>
-        <a href="register.html" class="option-btn">register</a>
+        <a href="{{ url_for('registration.login')}}" class="option-btn">Вход</a>
+        <a href="{{ url_for('registration.register')}}" class="option-btn">Регистрация</a>
         </div>
     </div>
+    {% endif %}
+
 </section>
 </header>   
 
@@ -49,19 +71,30 @@
 
 <div class="profile">
     <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" class="image" alt="">
-    <h3 class="name">shaikh anas</h3>
-    <p class="role">studen</p>
-    <a href="profile.html" class="btn">Мой профиль</a>
+    <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
+    <p class="role">{{current_user.role}}</p>
+    <a href="{{ url_for('profile', day_number='0')}}" class="btn">Мой профиль</a>
 </div>
 
-    <nav class="navbar">
-        {% block menu %}
-            {% for day in count_days %}
-            <a href="{{url_for('day_marathon', day_number=day)}}"><i class=""></i><span>День {{ day }}</span></a>
+    {% block menu %}
+        <nav class="navbar">
+            {% for i in count_days %}
+
+                {% if i==day.number_day %}
+                    <a class="active" href="{{url_for('day.day_marathon', day_number = i)}}">
+                    <span>День {{ i }}</span>
+                    </a>
+                {%else%}
+                    <a href="{{url_for('day.day_marathon', day_number = i)}}">
+                    <span>День {{ i }}</span>
+                    </a>
+                {% endif %}
+
             {% endfor %}
-        {% endblock %}
-    </nav>
+        </nav>
+    {% endblock %}
 </div>
+
 {% block body %} 
 
 {% endblock %}

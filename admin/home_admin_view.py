@@ -10,4 +10,4 @@ class HomeAdminView(AdminIndexView):
         if current_user.is_authenticated and current_user.role == 'admin':
             return self.render('admin/index.html')
 
-        return redirect(url_for('login'))
+        return redirect(url_for('registration.login'))

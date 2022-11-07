@@ -1,14 +1,11 @@
 import os.path
+from config import Configuration
 
 from flask import url_for, Markup
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
 
 from models import Image, Client, Day
-
-
-# 'D:\Python\fitness_marathon'
-file_path = os.path.abspath(os.path.dirname(__name__))
 
 
 def name_gen_image(model, file_data):
@@ -35,7 +32,7 @@ class ReportView(ModelView):
     form_extra_fields = {
         'cover_video_path': form.ImageUploadField('Загрузи фото отчета',
                                                   # Передаем абсолютный путь к каталогу, где хранятся файлы
-                                                  base_path=os.path.join(file_path,
+                                                  base_path=os.path.join(Configuration.base_dir,
                                                                          'static/storage/reports/'),
                                                   url_relative_path='storage/reports/',
                                                   namegen=name_gen_image,

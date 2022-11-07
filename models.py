@@ -49,6 +49,7 @@ class Day(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number_day = db.Column(db.Integer)
     video_path = db.Column(db.String)
+    resume_video = db.Column(db.Text)
     cover_video_path = db.Column(db.String)
     title_video = db.Column(db.String(500))
     task_description = db.Column(db.Text)
@@ -65,8 +66,7 @@ class Report(db.Model):
     day_id = db.Column(db.Integer, db.ForeignKey('day.id'), nullable=False)
     text = db.Column(db.Text)
     like = db.Column(db.Integer)
-
-    image = db.relationship('Image', backref='report', lazy=True)
+    image_path = db.Column(db.String)
 
     def __repr__(self):
         return f'<Report {self.id}>'
