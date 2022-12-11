@@ -1,5 +1,4 @@
 
-
 let toggleBtn = document.getElementById('toggle-btn');
 let body = document.body;
 let darkMode = localStorage.getItem('dark-mode');
@@ -64,35 +63,3 @@ function like_report(reportId) {
       }
     })
  }
-
-
-//function like(postId) {
-//  const likeCount = document.getElementById(`likes-count-${postId}`);
-//  const likeButton = document.getElementById(`like-button-${postId}`);
-//
-//  fetch(`/like-report/${postId}`, { method: "POST" })
-//    .then((res) => res.json())
-//    .then((data) => {
-//      likeCount.innerHTML = data["likes"];
-//      if (data["liked"] === true) {
-//        likeButton.className = "fas fa-thumbs-up";
-//      } else {
-//        likeButton.className = "far fa-thumbs-up";
-//      }
-//    })
-//    console.warn(xhr.responseText);
-//}
-
-
-// window.onscroll = () =>{
-//    profile.classList.remove('active');
-
-
-//    if(window.innerWidth < 1200){
-//       sideBar.classList.remove('active');
-//       body.classList.remove('active');
-//    }
-// }
-
-
-
