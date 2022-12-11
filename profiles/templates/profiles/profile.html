@@ -1,0 +1,210 @@
+{% extends 'base.html'%}
+
+{% block body %}
+<section class="user-profile">
+   <h1 class="heading">Ваш профиль</h1>
+   <div class="info">
+      <div class="user">
+          {% if client_data.profiles| length > 0 %}
+            <img src="{{ url_for('static', filename=client_data.profiles[0].avatar_client) }}" alt=""/>
+          {%else%}
+            <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" alt=""/>
+          {%endif%}
+         <h3>{{client_data.name}} {{client_data.surname}}</h3>
+         <p>{{client_data.role}}</p>
+         <form action="{{url_for('profiles.update_avatar_user')}}" class="add-comment" method="POST" enctype="multipart/form-data">
+            <div class="images-report"></div>
+            <div class="inline-option-btn">
+                <label class="custom-file-upload">
+                    <i class="fa fa-2x fa-camera"></i>
+                    Загрузить фото
+                    <input type="file" id="file" name="file" accept="image/png, image/jpeg, image/jpg"/>
+                </label>
+            </div>
+            <input type="submit" value="Отправить" id="btn-send-photo-avatar" class="inline-btn" style="display: none" >
+        </form>
+      </div>
+   
+      <div class="box-container">
+           <div class="box">
+            <div class="flex-day">
+               <i class="fa-solid fa-person-walking"></i>
+                <h3>Пройдено дней:</h3>
+                <div class="all-day">
+                   <div>
+                       <span>{{ client_data.reports| length }}</span>
+                   </div>
+                    <p>из</p>
+                   <div>
+                       <span>{{ count_days[-1] }}</span>
+                   </div>
+                </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<!--   ТАБЛИЦА   -->
+<section class="user-profile">
+    <div class="info">
+        <div class="table-responsive">
+           <table class="table" style="--bs-table-striped-bg: rgb(255 239 239); --bs-table-color: #577373; --bs-table-striped-color: #577373; ">
+             <thead>
+               <tr>
+                 <th scope="col"></th>
+                 <th scope="col">До</th>
+                 <th scope="col">1нед</th>
+                 <th scope="col">2нед</th>
+                 <th scope="col">3нед</th>
+                 <th scope="col">4нед</th>
+                 <th scope="col" class="column-results-top">Итог</th>
+               </tr>
+             </thead>
+             <tbody >
+               <tr>
+                 <th scope="row">Рука</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].hand }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].hand }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].hand }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].hand }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].hand }} {%else%} - {%endif%}</td>
+                     <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].hand - client_data.results[0].hand)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+               <tr>
+                 <th scope="row">Грудь</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].thorax }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].thorax }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].thorax }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].thorax }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].thorax }} {%else%} - {%endif%}</td>
+                     <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].thorax - client_data.results[0].thorax)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+               <tr>
+                 <th scope="row">Талия</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].waist }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].waist }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].waist }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].waist }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].waist }} {%else%} - {%endif%}</td>
+                     <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].waist - client_data.results[0].waist)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+               <tr>
+                 <th scope="row">Живот</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].abdomen }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].abdomen }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].abdomen }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].abdomen }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].abdomen }} {%else%} - {%endif%}</td>
+                     <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].abdomen - client_data.results[0].abdomen)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+                <tr>
+                 <th scope="row">Ягодицы</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].buttocks }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].buttocks }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].buttocks }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].buttocks }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].buttocks }} {%else%} - {%endif%}</td>
+                     <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].buttocks - client_data.results[0].buttocks)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+                <tr>
+                 <th scope="row">Бедро</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].thigh }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].thigh }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].thigh }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].thigh }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].thigh }} {%else%} - {%endif%}</td>
+                     <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].thigh - client_data.results[0].thigh)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+               <tr>
+                 <th scope="row">Голень</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].shin }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].shin }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].shin }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].shin }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].shin }} {%else%} - {%endif%}</td>
+                   <td class="column-results">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].shin - client_data.results[0].shin)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+               <tr>
+                 <th scope="row">Вес</th>
+                     <td>{% if client_data.results| length > 0 %} {{ client_data.results[0].weight }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 1 %} {{ client_data.results[1].weight }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 2 %} {{ client_data.results[2].weight }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 3 %} {{ client_data.results[3].weight }} {%else%} - {%endif%}</td>
+                     <td>{% if client_data.results| length > 4 %} {{ client_data.results[4].weight }} {%else%} - {%endif%}</td>
+                     <td class="column-results-bottom">{% if client_data.results| length > 0 %} {{ (client_data.results[-1].weight - client_data.results[0].weight)|round(1) }} {%else%} - {%endif%}</td>
+               </tr>
+             </tbody>
+           </table>
+        </div>
+    </div>
+</section>
+
+<!--   ФОТО ДО ПОСЛЕ   -->
+<section class="user-profile">
+    <div class="info">
+        <h3 class="foto-user-body">Фото "До"</h3>
+        <div class="box-container">
+            <div class="box">
+                <div class="flex">
+
+                    <div class="images-report">
+                        {% if client_data.body_photos is iterable %}
+                            {% for photo in client_data.body_photos %}
+                                {% if photo.before_photos %}
+                                <div class="img-report">
+                                    <img src="{{ url_for('static', filename=photo.before_photos) }}" alt="">
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="foto-user-body">Фото "После"</h3>
+        <div class="box-container">
+            <div class="box">
+                <div class="flex">
+
+                    <div class="images-report">
+                        {% if client_data.body_photos is iterable %}
+                            {% for photo in client_data.body_photos %}
+                                {% if photo.after_photos %}
+                                <div class="img-report">
+                                    <img src="{{ url_for('static', filename=photo.after_photos) }}" alt="">
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{{ url_for('static', filename='js/avatar_profile.js') }}"></script>
+{% endblock %}
+
+<!--         <div class="box">-->
+<!--            <div class="flex">-->
+<!--               <i class="fas fa-heart"></i>-->
+<!--               <div>-->
+<!--                  <span>33</span>-->
+<!--                  <p>videos liked</p>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--            <a href="#" class="inline-btn">view liked</a>-->
+<!--         </div>-->
+<!--   -->
+<!--         <div class="box">-->
+<!--            <div class="flex">-->
+<!--               <i class="fas fa-comment"></i>-->
+<!--               <div>-->
+<!--                  <span>12</span>-->
+<!--                  <p>videos comments</p>-->
+<!--               </div>-->
+<!--            </div>-->
+<!--            <a href="#" class="inline-btn">view comments</a>-->
+<!--         </div>-->
