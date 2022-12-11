@@ -4,13 +4,13 @@
    
 <section class="form-container">
    {% block content %}
-   <form action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data">
+   <form action="{{ url_for('registration.register') }}" method="POST" enctype="multipart/form-data">
       <h3>Регистрация</h3>
 
          {% for cat, msg in get_flashed_messages(True) %}
          <div class="flash_{{cat}}">{{msg}}<br>
             {% if 'email' in msg %}
-            <a href="{{ url_for('login') }}">Авторизуйтесь</a> или введите другой email
+               <a href="{{ url_for('login') }}">Авторизуйтесь</a> или введите другой email
             {% endif %}
          </div>
          {% endfor %}
@@ -25,7 +25,6 @@
       <p>Повторный пароль <span>*</span></p>
       <input type="password" name="psw2" placeholder="повторите пароль" required maxlength="20" class="box">
       <input type="submit" value="Зарегистрироваться" name="submit" class="btn">
-
    </form>
    {% endblock %}
 </section>
