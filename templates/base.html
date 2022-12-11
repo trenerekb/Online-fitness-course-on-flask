@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{title}}</title>
 
-<!-- font awesome cdn link  -->
+     <!-- CSS BOOTSTRAP -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <!-- font awesome cdn link  -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
-<!-- custom css file link  -->
+    <!-- custom css file link  -->
 <link type="text/css"  href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
-
 </head>
+
 <body>
 
 <header class="header">
 <section class="flex">
-    <a href= "/" class="logo"> 
+    <a href="{{ url_for('profiles.profile_view')}}" class="logo">
         <img src="{{ url_for('static', filename='images/logo.png') }}" class="image_logo" alt="Body Home">
     </a>
 
@@ -33,12 +37,16 @@
             <div id="toggle-btn" class="fas fa-sun"></div>
         </div>
     <div class="profile">
-        <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" class="image" alt="">
+        {% if current_user.profiles[0] is true %}
+            <img src="{{ url_for('static', filename=current_user.profiles[0].avatar_client) }}" class="image" alt="">
+        {% else %}
+            <img src="{{ url_for('static', filename='/storage/avatar_default/pic-1.jpg') }}" class="image" alt="">
+        {% endif %}
         <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
         <p class="role">{{current_user.role}}</p>
-        <a href="{{ url_for('profile', day_number=0) }}" class="btn">Мой профиль</a>
+        <a href="{{ url_for('profiles.profile_view') }}" class="btn">Мой профиль</a>
         <div class="flex-btn">
-        <a href="{{ url_for('registration.logout')}}" class="option-btn">Выход</a>
+            <a href="{{ url_for('registration.logout')}}" class="option-btn">Выход</a>
         </div>
     </div>
 
@@ -50,7 +58,11 @@
         </div>
 
     <div class="profile">
-        <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" class="image" alt="">
+        {% if current_user.is_authenticated %}
+            <img src="{{ url_for('static', filename=current_user.profiles[0].avatar_client) }}" class="image" alt="">
+        {% else %}
+            <img src="{{ url_for('static', filename='/storage/avatar_default/pic-1.jpg') }}" class="image" alt="">
+        {% endif %}
         <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
         <p class="role">{{current_user.role}}</p>
         <div class="flex-btn">
@@ -59,52 +71,63 @@
         </div>
     </div>
     {% endif %}
-
 </section>
-</header>   
+</header>
 
+{% block menu %}
 <div class="side-bar">
+    <div id="close-btn">
+        <i class="fas fa-times"></i>
+    </div>
+    <div class="profile">
+        {% if current_user.is_authenticated %}
+            <img src="{{url_for('static', filename=current_user.profiles[0].avatar_client)}}" class="image" alt="">
+        {% else %}
+            <img src="{{ url_for('static', filename='/storage/avatar_default/pic-1.jpg') }}" class="image" alt="">
+        {% endif %}
+        <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
+        <p class="role">{{current_user.role}}</p>
+        <a href="{{ url_for('profiles.profile_view') }}" class="btn">Мой профиль</a>
+    </div>
 
-<div id="close-btn">
-    <i class="fas fa-times"></i>
-</div>
-
-<div class="profile">
-    <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" class="image" alt="">
-    <h3 class="name">{{current_user.name}} {{current_user.surname}}</h3>
-    <p class="role">{{current_user.role}}</p>
-    <a href="{{ url_for('profile', day_number='0')}}" class="btn">Мой профиль</a>
-</div>
-
-    {% block menu %}
         <nav class="navbar">
             {% for i in count_days %}
-
                 {% if i==day.number_day %}
-                    <a class="active" href="{{url_for('day.day_marathon', day_number = i)}}">
+                    <a class="active" href="{{url_for('days.day_marathon', day_number = i)}}">
                     <span>День {{ i }}</span>
                     </a>
-                {%else%}
-                    <a href="{{url_for('day.day_marathon', day_number = i)}}">
+                {% else %}
+                    <a href="{{url_for('days.day_marathon', day_number = i)}}">
                     <span>День {{ i }}</span>
                     </a>
                 {% endif %}
-
             {% endfor %}
         </nav>
-    {% endblock %}
 </div>
+{% endblock menu %}
 
-{% block body %} 
+{% block body %}
 
-{% endblock %}
+{% block task %}
+{% endblock task %}
 
+{% block add_report %}
+{% endblock add_report %}
+
+{% endblock body %}
+
+{% block footer %}
 <footer class="footer">
 &copy; Женский фитнес онлайн марафон <span>Body Home</span> | все права защищены!
 </footer>
+{% endblock footer%}
 
 <!-- custom js file link  -->
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+></script>
 </body>
 </html>
