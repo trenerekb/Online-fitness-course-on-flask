@@ -1,0 +1,150 @@
+{% extends 'days/day.html'%}
+
+
+{% block task %}
+    {% if day.number_day == 0 %}
+        {% if result %}
+            {% for cat, msg in get_flashed_messages(True) %}
+                <section class="quiz">
+                    <div class="flash_{{cat}}">{{msg}}</div>
+                </section>
+            {% endfor %}
+        {% else %}
+        <section class="quiz">
+            <h1 class="heading">Задание</h1>
+
+            <div class="form-quiz">
+
+                <div class="step-row">
+                    <div id="progress"></div>
+                    <div class="step-col"><small>Шаг 1</small></div>
+                    <div class="step-col"><small>Шаг 2</small></div>
+                    <div class="step-col"><small>Шаг 3</small></div>
+                </div>
+
+                <form action="{{url_for('results.record_results', day_number=day.number_day)}}" method="POST" enctype="multipart/form-data">
+
+                    <div class="form" id="Form1">
+                        <h3>Заполните все поля</h3>
+
+                            {% for cat, msg in get_flashed_messages(True) %}
+                                <div class="flash_{{cat}}">{{msg}}</div>
+                            {% endfor %}
+
+                        <p>Ваш рост в см <span>*</span></p>
+                        <input type="number" name="growth" placeholder="введите свой рост в см" step="0.1" min="130" max="210" value="160" required maxlength="50" class="box">
+                        <p>Ваш вес <span>*</span></p>
+                        <input type="number" name="weight" placeholder="введите ваш текущий вес" step="0.1" min="45" max="150" value="70" required maxlength="50" class="box">
+                        <p>Ваша дата рождения <span>*</span></p>
+                        <input type="date" name="date_birth" value="1990-01-26" min="1950-01-01" max="2000-12-31" required maxlength="20" class="box">
+                        <div class="btn-quiz"><button type="button" class="btn" id="Next1">Далее <i class="fas fa-angle-double-right" aria-hidden="true"></i></button></div>
+                    </div>
+                    <div class="form" id="Form2">
+                        <h3>Заполните все поля</h3>
+
+                            {% for cat, msg in get_flashed_messages(True) %}
+                                <div class="flash_{{cat}}">{{msg}}</div>
+                            {% endfor %}
+
+                        <p>Объем руки <span>*</span></p>
+                        <input type="number" name="hand" placeholder="введите объем руки в см" step="0.1" min="20" max="50" value="30" required maxlength="50" class="box">
+                        <p>Объем грудной клетки <span>*</span></p>
+                        <input type="number" name="thorax" placeholder="введите объем грудной клетки в см" step="0.1" min="40" max="150" value="100" required maxlength="50" class="box">
+                        <p>Объем талии <span>*</span></p>
+                        <input type="number" name="waist" placeholder="введите объем талии в см" step="0.1" min="40" max="150" value="90" required maxlength="50" class="box">
+                        <p>Объем живота <span>*</span></p>
+                        <input type="number" name="abdomen" placeholder="введите объем живота см" step="0.1" min="40" max="170" value="95" required maxlength="50" class="box">
+                        <p>Объем ягодиц <span>*</span></p>
+                        <input type="number" name="buttocks" placeholder="введите объем ягодиц в см" step="0.1" min="40" max="170" value="110" required maxlength="50" class="box">
+                        <p>Объем бедра <span>*</span></p>
+                        <input type="number" name="thigh" placeholder="введите объем бедра в см" step="0.1" min="30" max="100" value="60" required maxlength="50" class="box">
+                        <p>Объем голени <span>*</span></p>
+                        <input type="number" name="shin" placeholder="введите объем голени в см" step="0.1" min="10" max="70" value="30" required maxlength="50" class="box">
+
+                        <div class="btn-quiz">
+                            <button type="button" class="btn" id="Back1"><i class="fas fa-angle-double-left" aria-hidden="true"></i> Назад</button>
+                            <button type="button" class="btn" id="Next2">Далее <i class="fas fa-angle-double-right" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="form" id="Form3">
+                        <h3>Загрузите 4 фото</h3>
+
+                            {% for cat, msg in get_flashed_messages(True) %}
+                                <div class="flash_{{cat}}">{{msg}}</div>
+                            {% endfor %}
+
+                        <div class="images-report"></div>
+                        <div class="btn-upload">
+                            <label class="custom-file-upload">
+                                <i class="fa fa-2x fa-camera"></i>
+                                Добавить фото
+                                <input type="file" id="file" name="file" multiple="multiple" accept="image/png, image/jpeg, image/jpg"/>
+                            </label>
+                        </div>
+                        <div class="btn-quiz">
+                            <button type="button" class="btn" id="Back2"><i class="fas fa-angle-double-left" aria-hidden="true"></i> Назад</button>
+                            <button type="submit" class="btn">Отправить <i class="fa-sharp fa-solid fa-paper-plane"></i> </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <script src="{{ url_for('static', filename='js/upload_images.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/quiz_form.js') }}"></script>
+        {% endif %}
+
+{% else %}
+    {% if result %}
+        {% for cat, msg in get_flashed_messages(True) %}
+            <section class="quiz">
+                <div class="flash_{{cat}}">{{msg}}</div>
+            </section>
+        {% endfor %}
+    {% else %}
+        <section class="quiz">
+            <h1 class="heading">Задание</h1>
+            <div class="form-quiz">
+                {% for cat, msg in get_flashed_messages(True) %}
+                    <div class="flash_{{cat}}">{{msg}}</div>
+                {% endfor %}
+
+                <form action="{{url_for('results.record_results', day_number=day.number_day)}}" method="POST" enctype="multipart/form-data">
+                    <div class="form2" >
+
+                            <h3>Заполните все поля</h3>
+                            <p>Объем руки <span>*</span></p>
+                            <input type="number" name="hand" placeholder="введите объем руки в см" step="0.1" min="20" max="50" value="30" required maxlength="50" class="box">
+                            <p>Объем грудной клетки <span>*</span></p>
+                            <input type="number" name="thorax" placeholder="введите объем грудной клетки в см" step="0.1" min="40" max="150" value="100" required maxlength="50" class="box">
+                            <p>Объем талии <span>*</span></p>
+                            <input type="number" name="waist" placeholder="введите объем талии в см" step="0.1" min="40" max="150" value="90" required maxlength="50" class="box">
+                            <p>Объем живота <span>*</span></p>
+                            <input type="number" name="abdomen" placeholder="введите объем живота см" step="0.1" min="40" max="170" value="95" required maxlength="50" class="box">
+                            <p>Объем ягодиц <span>*</span></p>
+                            <input type="number" name="buttocks" placeholder="введите объем ягодиц в см" step="0.1" min="40" max="170" value="110" required maxlength="50" class="box">
+                            <p>Объем бедра <span>*</span></p>
+                            <input type="number" name="thigh" placeholder="введите объем бедра в см" step="0.1" min="30" max="100" value="60" required maxlength="50" class="box">
+                            <p>Объем голени <span>*</span></p>
+                            <input type="number" name="shin" placeholder="введите объем голени в см" step="0.1" min="10" max="70" value="30" required maxlength="50" class="box">
+                            <p>Ваш вес <span>*</span></p>
+                            <input type="number" name="weight" placeholder="введите ваш текущий вес" step="0.1" min="45" max="150" value="70" required maxlength="50" class="box">
+                            <div class="btn-quiz">
+                                <button type="submit" class="btn">Отправить</button>
+                            </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    {% endif %}
+{% endif %}
+
+{% endblock task%}
+
+{% block add_report %}
+{% endblock add_report%}
+
+{% block all_reports %}
+{% endblock all_reports %}
+
+
+
