@@ -1,17 +1,15 @@
 from app import app
-from app import db
-
-from comments.blueprint import comments
+from days.day import day
+from profiles.profile import profile
 from registration.registration import reg
 from reports.report import report
-from days.day import day
+from results.results_clients import result
 
-import view
-
-app.register_blueprint(comments, url_prefix='/comments')
 app.register_blueprint(reg, url_prefix='/registration')
 app.register_blueprint(report, url_prefix='/report')
 app.register_blueprint(day, url_prefix='/day')
+app.register_blueprint(result, url_prefix='/result')
+app.register_blueprint(profile, url_prefix='/profile')
 
 if __name__ == "__main__":
     app.run()

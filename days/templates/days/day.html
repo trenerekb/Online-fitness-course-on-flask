@@ -1,188 +1,306 @@
-
 {% extends 'base.html'%}
 
 
 {% block body %}
-<section class="watch-video">
-    <h1 class="number_days">День {{day.number_day}}</h1>
-<div class="video-container">
-    
-    <div class="video">
-        <video src="{{ url_for('static', filename=path_storage+day.video_path) }}" controls poster="{{ url_for('static', filename=path_storage+day.cover_video_path) }}" id="video"></video>
-    </div>
-    <h3 class="title">{{day.title_video}}</h3>
-    <div class="info"></div>
-    <div class="tutor">
-        <div>
-            <h3>Краткое содержание видео:</h3>
+
+    <section class="watch-video">
+        <h1 class="number_days">День {{day.number_day}}</h1>
+        <div class="video-container">
+            <div class="video">
+                <video src="{{ url_for('static', filename=video) }}" controls poster="{{ url_for('static', filename=cover_video) }}" id="video"></video>
+            </div>
+            <h3 class="title">{{day.title_video}}</h3>
+            <div class="info"></div>
+            <div class="tutor">
+                <div>
+                    <h3>Краткое содержание видео:</h3>
+                </div>
+            </div>
+            <p class="description">
+                {{day.resume_video}}
+            </p>
         </div>
-    </div>
-    <p class="description">
-        {{day.resume_video}}
-    </p>
-</div>
-</section>
+    </section>
 
-
-{% block task %}
-<section class="tasks">
-    <h1 class="heading">Задание</h1>
-    <div class="box-container">
-        <div class="box">
+    {% block task %}
+    <section class="tasks">
+        <h1 class="heading">Задание</h1>
+        <div class="box-container">
+            <div class="box">
                 <div class="tasks-box">
                     {{ day.task_description }}
                 </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block add_report %}
-<section class="comments">
-<h1 class="heading">Ваш отчет</h1>
-    <form action="{{url_for('report.add_report', day_number=day.number_day)}}" class="add-comment" method="POST" enctype="multipart/form-data">
-        <h3>Добавить отчет</h3>
-        {% for cat, msg in get_flashed_messages(True) %}
-        <div class="flash_{{cat}}">{{msg}}</div>
-         {% endfor %}
-        <textarea name="text_report" placeholder="введите свой отчет" required maxlength="1000" cols="30" rows="10"></textarea>
-        <div class="images-report"></div>
-        <div class="inline-option-btn">
-            <label class="custom-file-upload">
-                <i class="fa fa-2x fa-camera"></i>
-                Добавить фото
-                <input type="file" id="file" name="file" multiple="multiple" accept="image/png, image/jpeg, image/jpg"/>
-            </label>
-        </div>
-        <input type="submit" value="Отправить" class="inline-btn" >
-    </form>
-</section>
-{% endblock %}
-
-{% block reports %}
-<section class="comments">
-    <h1 class="heading">Отчеты участниц</h1>
-    <div class="box-container">
-        {% if add_report %}
-        <div class="box">
-            <div class="user">
-                <img src="{{url_for('static', filename='images/img-report.jpeg')}}" alt="">
-                <div>
-                <h3>{{ current_user.name }} {{ current_user.surname }}</h3>
-                <span>{{ current_user.date}}</span>
-                </div>
             </div>
-            <div class="comment-box">{{ text_report_current_user }}</div>
+        </div>
+    </section>
+    {% endblock %}
 
+
+    {% if client_report %}
+    {% else %}
+    {% block add_report %}
+    <!--     БЛОК С ДОБАВЛЕНИЕМ ОТЧЕТА     -->
+    <section class="comments">
+    <h1 class="heading">Ваш отчет</h1>
+        <form action="{{url_for('reports.add_report', day_number=day.number_day)}}" class="add-comment" method="POST" enctype="multipart/form-data">
+            <h3>Добавить отчет</h3>
+            <textarea name="text_report" placeholder="введите свой отчет" required maxlength="1000" cols="30" rows="10"></textarea>
             <div class="images-report"></div>
+            <div class="inline-option-btn">
+                <label class="custom-file-upload">
+                    <i class="fa fa-2x fa-camera"></i>
+                    Добавить фото
+                    <input type="file" id="file" name="file" multiple="multiple" accept="image/png, image/jpeg, image/jpg"/>
+                </label>
+            </div>
+            <input type="submit" value="Отправить" class="inline-btn" >
+        </form>
+    </section>
+    {% endblock add_report %}
+    {% endif %}
 
-            <form action="" class="flex-btn">
-                <input type="submit" value="Редактировать" name="edit_comment" class="inline-option-btn">
-                <input type="submit" value="Удалить" name="delete_comment" class="inline-delete-btn">
-            </form>
-        </div>
-        {% endif %}
 
-    <div class="box">
-        <div class="user">
-            <img src="images/pic-2.jpg" alt="">
-            <div>
-            <h3>{{user_name_comment}}</h3>
-            <span>22-10-2022</span>
-            </div>
-        </div>
-        <div class="comment-box">awesome tutorial!
-            keep going!</div>
-        <div class="btn-like-comment">
-            <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
-            <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
-        </div>
-        <div class="box-reply-comment">  
-            <div class="user-reply">
-                <img src="images/pic-2.jpg" alt="">
-                <div>
-                <h3>John deo</h3>
-                <span>22-10-2022</span>
-                </div>
-            </div>
-            <form action="" class="reply-comment" method="post">
-            <textarea class="add-comment-report" name="comment_box" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
-                <div class="reply-btn">
-                    <label class="custom-file-upload">
-                        <i class="fa fa-2x fa-camera"></i>
-                        <input type="file" name="input_foto" accept=""/>
-                    </label>
-                    <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-coment">
-                </div>
-            </form>
-            <div class="user-reply">
-                <img src="images/pic-2.jpg" alt="">
-                <div>
-                <h3>{{user_name_reply}}</h3>
-                <span>{{date_reply_comment}}</span>
-                </div>
-            </div>
-            <div class="comment-box">{{reply_comment}}</div>
-            <div class="btn-like-comment">
-                <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
-                <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
-            </div>
-            <div class="user-reply">
-                <img src="images/pic-2.jpg" alt="">
-                <div>
-                <h3>{{user_name_reply}}</h3>
-                <span>{{date_reply_comment}}</span>
-                </div>
-            </div>
-            <div class="comment-box">{{reply_comment}}</div>
-            <div class="btn-like-comment">
-                <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
-                <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
-            </div>
-        </div>
-    </div>
+    <!--     НАЧАЛА БЛОКА СО ВСЕМИ ОТЧЕТАМИ УЧАСТНИКОВ     -->
+    {% block all_reports %}
+        <section class="comments">
+            <h1 class="heading">Отчеты участниц</h1>
+            <div class="box-container" id="box-container">
 
-    <div class="box">
-        <div class="user">
-            <img src="images/pic-2.jpg" alt="">
-            <div>
-            <h3>{{user_name_comment}}</h3>
-            <span>{{date_comment}}</span>
-            </div>
-        </div>
-        <div class="comment-box">{{comment}}</div>
-        <div class="btn-like-comment">
-            
-            <button class="inline-btn-fa-coment" id="btn-comment"><i class="fas fa-comment"></i> 0</button>
-            <button class="inline-btn-fa-like"><i class="fas fa-heart"></i> 2</button>
-
-        </div>
-        
-
-        <div class="box-reply-comment">  
-            <div class="user">
-                <img src="images/pic-2.jpg" alt="">
-                <div>
-                <h3>{{user_name_reply}}</h3>
-                <span>{{date_reply_comment}}</span>
+                <!--    ПРИ НАЖАТИИ "РЕДАКТИРОВАТЬ" ВЫХОДИТ ЭТА ФОРМА ДЛЯ РЕДАКТИРОВАНИЯ     -->
+                <div class="edit-report" id="edit-active" style="display: none">
+                    {% for cat, msg in get_flashed_messages(True) %}
+                        <div class="flash_{{cat}}">{{msg}}</div>
+                    {% endfor %}
+                    <form action="{{url_for('reports.update_report', day_number=day.number_day)}}" class="add-comment" method="POST" enctype="multipart/form-data">
+                        <div class="user">
+                            <img src="{{url_for('static', filename=current_user.profiles[0].avatar_client)}}" alt="">
+                            <div>
+                                <h3>{{ current_user.name }} {{ current_user.surname }}</h3>
+                                <span>{{ client_report.date}}</span>
+                            </div>
+                        </div>
+                        <textarea name="text_report" required maxlength="1000" cols="30" rows="10">{{ client_report.text }}</textarea>
+                        <div class="images-report">
+                            {% for image in client_report.images %}
+                                {% if image.image_path %}
+                                <div class="img-report">
+                                    <input type="text" name="{{ image.image_path }}" style="display: none"/>
+                                    <div class="preview-remove" data-name="${{image.image_path}}">×</div>
+                                    <img src="{{ url_for('static', filename= image.image_path) }}" alt="">
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="inline-option-btn">
+                            <label class="custom-file-upload">
+                                <i class="fa fa-2x fa-camera"></i>
+                                Добавить фото
+                                <input type="file" id="file" name="file" multiple="multiple" accept="image/png, image/jpeg, image/jpg"/>
+                            </label>
+                        </div>
+                        <input type="submit" value="Отправить" class="inline-btn">
+                    </form>
                 </div>
-            </div>
+                <script src="{{ url_for('static', filename='js/upload_images.js') }}"></script>
 
-                <form action="" class="reply-comment" method="post">
-                <textarea class="add-comment-report" name="comment_box" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
-                <div class="reply-btn">
-                    <label class="custom-file-upload">
-                        <i class="fa fa-2x fa-camera"></i>
-                        <input type="file" name="input_foto" accept=""/>
-                    </label>
-                    <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-coment">
-                    
-                </div>
-                </form>
-        </div> 
-    </div>
-</div>
-</section>
-{% endblock %}
-{% endblock %}
+        <!--     ОТЧЕТ ТЕКУЩЕГО УЧАСТНИКА     -->
+                {% if client_report %}
+                    {% block edit_report %}
+                    <div class="box" id="first-report-current-user">
+                        {% for cat, msg in get_flashed_messages(True) %}
+                            <div class="flash_{{cat}}">{{msg}}</div>
+                        {% endfor %}
+                        <div class="user">
+                            {% if client_report.clients.profiles | length > 0 %}
+                            <img src="{{url_for('static', filename=client_report.clients.profiles[0].avatar_client)}}" alt=""/>
+                            {%else%}
+                            <img src="{{ url_for('static', filename='images/pic-7.jpg') }}" alt=""/>
+                            {%endif%}
+
+                            <div>
+                                <h3>{{ current_user.name }} {{ current_user.surname }}</h3>
+                                <span>{{ client_report.date}}</span>
+                            </div>
+                        </div>
+                        <div class="comment-box">{{ client_report.text }}</div>
+                        <div class="images-report">
+                            {% for image in client_report.images %}
+                            <div class="img-report">
+                                <img src="{{ url_for('static', filename= image.image_path) }}" alt="">
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                         <!--        # КНОПКА "КОММЕНТАРИЙ" К ЕГО ОТЧЕТУ#    -->
+                        <div class="btn-like-comment">
+                            <a data-bs-toggle="collapse" href="#comments-{{ client_report.id }}" role="button" aria-expanded="false" aria-controls="comments-{{client_report.id}}">
+                                <button class="inline-btn-fa-comment">
+                                    <i class="far fa-comment"></i>
+                                    {{ client_report.comments| length }}
+                                </button>
+                            </a>
+
+                        <!--        # КНОПКА "ЛАЙК" К ЕГО ОТЧЕТУ#    -->
+
+                                <button class="inline-btn-fa-like" onclick="like_report('{{client_report.id}}')">
+                                    {% if current_user.id in client_report.likes| map(attribute="client_id")|list %}
+                                        <i class="fas fa-heart" id="like-button-{{client_report.id}}"></i>
+                                    {% else %}
+                                        <i class="far fa-heart" id="like-button-{{client_report.id}}"></i>
+                                    {% endif %}
+                                    <span id="likes-count-{{client_report.id}}">
+                                    {{ client_report.likes| length }}
+                                    </span>
+                                </button>
+
+                        </div>
+                        <!--        # КНОПКИ "РЕДАКТИРОВАТЬ" "УДАЛИТЬ" ЕГО ОТЧЕТ#    -->
+                        <div class="flex-btn">
+                            <input type="submit" id="btn-edit-report" multiple="multiple" value="Редактировать" class="inline-option-btn">
+                            <form action="{{url_for('reports.delete_report', day_number=day.number_day)}}" method="POST">
+                                 <input type="submit" value="Удалить" name="delete_comment" class="inline-delete-btn">
+                            </form>
+                        </div>
+
+                       <!--        #  КОММЕНТАРИИ К ЕГО ОТЧЕТУ #     -->
+                        <div class="collapse" id="comments-{{ client_report.id }}">
+                            <div class="box-reply-comment-active">
+                                <div class="user-reply">
+
+                                        <img src="{{url_for('static', filename=current_user.profiles[0].avatar_client)}}" alt=""/>
+
+                                    <div>
+                                        <h3>{{ current_user.name }} {{ current_user.surname }}</h3>
+                                    </div>
+                                </div>
+                                <form action="{{url_for('reports.add_comment_to_report', report_id=client_report.id, day_number=day.number_day)}}" class="reply-comment" method="post">
+                                    <textarea class="add-comment-report" name="text_comment" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
+                                    <div class="reply-btn">
+                                        <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-comment">
+                                    </div>
+                                </form>
+                                {% if client_report.comments %}
+                                    {% for comment in client_report.comments %}
+                                        <div class="user-reply">
+                                            <img src="{{url_for('static', filename=client_report.clients.profiles[0].avatar_client)}}" alt="">
+                                            <div>
+                                                <h3>{{ comment.clients.name }} {{ comment.clients.surname }}</h3>
+                                                <span>{{ comment.date }}</span>
+                                            </div>
+                                            <!--        # КНОПКА "УДАЛИТЬ КОММЕНТАРИЙ" #    -->
+                                            {% if comment.client_id == current_user.id %}
+                                            <div class="delete-comment" style="margin-left:auto">
+                                                <a href="{{url_for('reports.delete_comment', comment_id=comment.id, day_number=day.number_day)}}">
+                                                    <button class="inline-btn-fa-like">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    <div class="comment-box">{{ comment.text }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <script src="{{ url_for('static', filename='js/edit_form.js') }}"></script>
+                    {% endblock edit_report %}
+                {% endif %}
+
+        <!--        ОСТАЛЬНЫЕ ОТЧЕТЫ      -->
+                {% if all_reports %}
+                    {% for report in all_reports %}
+                        {% if report.client_id == current_user.id %}
+                        {% else %}
+                        <div class="box">
+                            <div class="user">
+
+                                <img src="{{url_for('static', filename=report.clients.profiles[0].avatar_client)}}" alt="">
+                                <div>
+                                <h3>{{ report.clients.name }} {{ report.clients.surname }}</h3>
+                                <span>{{ report.date }}</span>
+                                </div>
+                            </div>
+                            <div class="comment-box">{{ report.text }}</div>
+                            <div class="images-report">
+                                    {% for image in report.images %}
+                                    <div class="img-report">
+                                        <img src="{{ url_for('static', filename= image.image_path) }}" alt="">
+                                    </div>
+                                    {% endfor %}
+                            </div>
+
+                            <!--        # КНОПКА "КОММЕНТАРИИ" #    -->
+                            <div class="btn-like-comment">
+                            <a data-bs-toggle="collapse" href="#comments-{{ report.id }}" role="button" aria-expanded="false" aria-controls="comments-{{report.id}}">
+                                <button class="inline-btn-fa-comment">
+                                    <i class="far fa-comment"></i>
+                                    {{ report.comments| length }}
+                                </button>
+                            </a>
+                        <!--        # КНОПКА "ЛАЙК" #    -->
+                                <button class="inline-btn-fa-like" onclick="like_report('{{report.id}}')">
+                                    {% if current_user.id in report.likes| map(attribute="client_id")|list %}
+                                        <i class="fas fa-heart" id="like-button-{{report.id}}"></i>
+                                    {% else %}
+                                        <i class="far fa-heart" id="like-button-{{report.id}}"></i>
+                                    {% endif %}
+                                    <span id="likes-count-{{report.id}}">
+                                    {{ report.likes| length }}
+                                    </span>
+                                </button>
+                            </div>
+
+                        <!--        #  КОММЕНТАРИИ К ОТЧЕТУ #     -->
+                            <div class="collapse" id="comments-{{ report.id }}">
+                                <div class="box-reply-comment-active">
+                                    <div class="user-reply">
+                                        <img src="{{url_for('static', filename=current_user.profiles[0].avatar_client)}}" alt="">
+                                        <div>
+                                        <h3>{{ current_user.name }} {{ current_user.surname }}</h3>
+                                        </div>
+                                    </div>
+
+                                    <form action="{{url_for('reports.add_comment_to_report', report_id=report.id, day_number=day.number_day)}}" class="reply-comment" method="post">
+                                        <textarea class="add-comment-report" name="text_comment" placeholder="введите текст" required maxlength="1000" cols="35" rows="3"></textarea>
+                                        <div class="reply-btn">
+                                            <input type="submit" value="ответить" id="reply_comment" name="reply_comment" class="inline-btn-reply-comment">
+                                        </div>
+                                    </form>
+
+                                    {% if report.comments %}
+                                        {% for comment in report.comments %}
+                                        <div class="user-reply">
+                                            <img src="{{url_for('static', filename=comment.clients.profiles[0].avatar_client)}}" alt="">
+                                            <div>
+                                                <h3>{{ comment.clients.name }} {{ comment.clients.surname }}</h3>
+                                                <span>{{ comment.date }}</span>
+                                            </div>
+                                            <!--        # КНОПКА "УДАЛИТЬ КОММЕНТАРИЙ" #    -->
+                                            {% if comment.client_id == current_user.id %}
+                                            <div class="delete-comment" style="margin-left:auto">
+                                                <a href="{{url_for('reports.delete_comment', comment_id=comment.id, day_number=day.number_day)}}">
+                                                    <button class="inline-btn-fa-like">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="comment-box">{{ comment.text }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </section>
+    {% endblock all_reports %}
+{% endblock body %}
+
 

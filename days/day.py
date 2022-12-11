@@ -1,36 +1,32 @@
-from flask import Blueprint, render_template, url_for, request, flash, session, redirect, abort
+import os
+
+from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 
-from models import Client, Day
+from config import Configuration
+from models import Client, Day, Report, Result
 
-day = Blueprint('day', __name__, template_folder='templates')
+day = Blueprint('days', __name__, template_folder='templates')
 
 
 @day.route('/<day_number>')
 @login_required
 def day_marathon(day_number):
-    day = Day.query.filter_by(id=int(day_number)+1).first()
+    client_id = current_user.id
+    current_day = Day.query.filter(Day.id == int(day_number) + 1).first()
+    client_data = Client.query.filter(Client.id == client_id).first()
     count_days = [i for i in range(int(Day.query.count()))]
-    path_storage = 'storage/marathon_days/'
-    if day_number == '0':
-        return render_template('days/day0.html', path_storage=path_storage, day=day, count_days=count_days)
-    else:
-        return render_template('days/day.html', path_storage=path_storage, day=day, count_days=count_days,
-                               current_user=current_user)
+    all_reports = Report.query.filter(Report.day_id == day_number)
+    client_report = Report.query.filter(Report.client_id == client_id, Report.day_id == day_number).first()
+    video = os.path.join(Configuration.path_to_video_and_cover, current_day.video_path)
+    cover_video = os.path.join(Configuration.path_to_video_and_cover, current_day.cover_video_path)
+    result = Result.query.filter(Result.day_id == day_number, Result.client_id == client_id).first()
 
+    if day_number in ('0', '7', '14', '21'):
+        return render_template('days/measurement_day.html', client_data=client_data, video=video, result=result,
+                               cover_video=cover_video, client_report=client_report,
+                               day=current_day, count_days=count_days, title=f'День {day_number}')
 
-@day.route('/quiz', methods=['POST', 'GET'])
-def quiz():
-    if request.method == 'POST':
-        growth = request.form.get('growth')
-        weight = request.form.get('weight')
-        date_birth = request.form.get('date_birth')
-        hand = request.form.get('hand')
-        thorax = request.form.get('thorax')
-        waist = request.form.get('waist')
-        abdomen = request.form.get('abdomen')
-        buttocks = request.form.get('buttocks')
-        thigh = request.form.get('thigh')
-        print(growth, weight, date_birth, hand, thorax, waist, abdomen, buttocks, thigh)
-        flash('Отлично!', category='right')
-    return redirect(url_for('day_marathon', day_number='0'))
+    return render_template('days/day.html', video=video, cover_video=cover_video, client_data=client_data,
+                           client_report=client_report, day=current_day, all_reports=all_reports,
+                           count_days=count_days, title=f'День {day_number}')
