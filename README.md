@@ -22,7 +22,7 @@
 + [X] Просмотр отчетов других участниц в этом дне.
 *Просмотр видео*
 ![day](days/day_of_course.png)
-## ![day](reports/measurements.png)
+## ![day](reports/add_reports.png)
 
 **2. Профиль клиента, где есть:**
 + [X] Возможность загрузить свой аватар.
