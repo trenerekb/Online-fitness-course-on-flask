@@ -24,7 +24,8 @@
 *Просмотр видео*
 ![day](days/day_of_course.png)
 *Отчеты, комментарии, лайки*
-## ![report](reports/add_report.png)
+![report](reports/add_report.png)
+##
 
 **2. Профиль клиента, где есть:**
 + [X] Возможность загрузить свой аватар.
