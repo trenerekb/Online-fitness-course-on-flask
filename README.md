@@ -1,4 +1,4 @@
-# Online_fitness_course_on_flask
+# Body Home
 ![Python 3.10.1](https://img.shields.io/badge/python-3.10.1-brightgreen) ![flask-2.2.3](https://img.shields.io/badge/flask-2.2.3-brightgreen)
 ![Flask-Migrate-3.1](https://img.shields.io/badge/flask_migrate-3.1-brightgreen)
 
@@ -9,7 +9,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-yellowgreen)
 
 
-**Online fitness course** - это веб приложение для женщин, которые хотят похудеть в домашних условиях.
+**Body Home** - это веб приложение для женщин, которые хотят похудеть в домашних условиях.
 
 ## **Что реализовано**
 
